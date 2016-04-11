@@ -1,0 +1,33 @@
+{
+  "name": "",
+  "children": [
+    {
+      "name": "B域",
+      "color": "rgba(255, 196, 31, 0.7)",
+      "children": [
+        {"name": "cluster","color": "#ff9900","size": 15},
+        {"name": "graph","color": "#ffb90b","size": 10},
+        {"name": "optimization","color": "#e8b62a","size": 5},
+        {"name": "Transition", "color": "#efcf5d","size": 5},
+        {"name": "Transitioner","color": "#edcd7e", "size": 5}
+      ]
+    },
+    {
+      "name": "O域",
+      "color": "rgba(103, 234, 42, 0.7)",
+      "children": [
+        {"name": "Pause","color": "#33cc00","size": 20},
+        {"name": "Scheduler", "color": "#76ff1d","size": 10},
+        {"name": "Sequence","color": "#96f460", "size": 10}
+      ]
+    },
+    {
+      "name": "M域",
+      "color": "rgba(11, 210, 219, 0.7)",
+      "children": [
+        {"name": "DataField","color": "#0066cc", "size": 15},
+        {"name": "DataSchema","color": "#198ddb","size": 5}
+      ]
+    }
+  ]
+}

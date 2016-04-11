@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: auto;
+        position: relative;
+        width: 960px;
+    }
+
+    .tooltip{
+        position: absolute;
+        line-height:20px;
+        color:#fff;
+        padding:8px 15px;
+        font-size:13px;
+        text-align: center;
+        background-color:#333;
+        border-radius: 5px;
+        -moz-border-radius:5px;
+        -webkit-border-radius: 5px;
+        -o-border-radius:5px;
+        display: none;
+    }
+    path:hover{cursor:pointer;}
+
+</style>
+<span></span>
+<!--<form>
+    <label><input type="radio" name="mode" value="size"> Size</label>
+    <label><input type="radio" name="mode" value="count" checked> Count</label>
+</form>-->
+<script src="../../script/lib/d3.min.js"></script>
+<script>
+    var width = 700,
+            height = 580,
+            radius = Math.min(width, height) / 2-35,
+            color = d3.scale.category20c();
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height * .50 + ")");
+
+    var partition = d3.layout.partition()
+            .sort(null)
+            .size([2 * Math.PI, radius * radius])
+            .value(function(d) { return 1; });
+
+    var arc = d3.svg.arc()
+            .startAngle(function(d) { return d.x; })
+            .endAngle(function(d) { return d.x + d.dx; })
+            .innerRadius(function(d) { return Math.sqrt(d.y); })
+            .outerRadius(function(d) {return Math.sqrt(d.y + d.dy)+ d.value; });
+
+
+    d3.json("flare.json", function(error, root) {
+        if (error){throw error;}
+        var path = svg.datum(root).selectAll("path")
+                .data(partition.nodes)
+                .enter().append("g");
+        path.data(partition.value(function(d) { return d.size;}).nodes)//按尺寸显示
+                .transition()
+                .duration(1500)
+                .attrTween("d", arcTween);
+        path.append("path")
+                .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+                .attr("d", arc)
+                .style("stroke", "#fff")
+                .style("fill", function(d) {
+                    return d.color;
+                    //return color((d.children ? d : d.parent).name);
+                })
+                .style("fill-rule", "evenodd")
+                .each(stash)
+                .on("mouseover", function(d){
+                    tooltip.html( d.name+"<br/>"+ (d.size ? d.size : ""))
+                            .style("left", (d3.event.pageX-185) + "px")
+                            .style("top", (d3.event.pageY-5) + "px")
+                            .style({"opacity":0.7,"z-index":2,"display":"block"});
+                    d3.select("." + d3.select(this).attr('class')).attr("fill-opacity",function(d){return d.children ? 0.8:1;});
+                })
+                .on("mousemove", function(d){
+                    tooltip.style("left", (d3.event.pageX-185) + "px")
+                            .style("top", (d3.event.pageY-5) + "px");
+
+                })
+                .on("mouseout", function(){
+                    tooltip.style({"opacity":0,"z-index":-1,"display":"none"});
+                    d3.select("." + d3.select(this).attr('class')).attr("fill-opacity",0.8);
+                })
+                .on("click", function(d){
+                    alert(d.name);
+                });
+
+        path.append("text")
+                .style("font-size", "12px")
+                .style("fill", "#fff")
+                .attr("text-anchor","middle")
+                .attr("transform",function(d,i){
+                    //第一个元素（最中间的），只平移不旋转
+                    //if( i == 0 )
+                        return "translate(" + arc.centroid(d) + ")";
+
+                    /*//其他的元素，既平移也旋转
+                    var r = 0;
+                    if( (d.x+d.dx/2)/Math.PI*180 < 180 )  // 0 - 180 度以内的
+                        r = 180 * ((d.x + d.dx / 2 - Math.PI / 2) / Math.PI);
+                    else  // 180 - 360 度以内的
+                        r = 180 * ((d.x + d.dx / 2 + Math.PI / 2) / Math.PI);
+
+                    //既平移也旋转
+                    return  "translate(" + arc.centroid(d) + ")" +
+                            "rotate(" + r + ")";*/
+                })
+                .text(function(d) { return d.name; });
+        var tooltip = d3.select("body")
+                .append("div")
+                .attr("class","tooltip")
+                .style("opacity",0.0);
+
+    });
+
+    // Stash the old values for transition.
+    function stash(d) {
+        d.x0 = d.x;
+        d.dx0 = d.dx;
+    }
+
+    // Interpolate the arcs in data space.
+    function arcTween(a) {
+        var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+        return function(t) {
+            var b = i(t);
+            a.x0 = b.x;
+            a.dx0 = b.dx;
+            return arc(b);
+        };
+    }
+
+    d3.select(self.frameElement).style("height", height + "px");
+
+</script>
