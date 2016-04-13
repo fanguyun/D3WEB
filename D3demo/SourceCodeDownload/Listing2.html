@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<!--
+<script src="https://github.com/douglascrockford/JSON-js/blob/master/json2.js"></script>
+ -->
+<script src="d3.v3.js"></script>
+<!--Save d3.v3.js in the same folder-->
+<script>
+
+var views = [
+  [7057, 7483, 3749, 3846, 4598],
+  [ 2371, 7397, 4589, 2861, 8249],
+  [ 5972, 5672, 9152, 9725, 8983],
+  [ 9763,  8462,  9782, 1953, 5182],
+  [ 9567,  1571,  2895, 2783, 1874],
+  [ 2371, 7397, 4589, 2861, 8249]
+		];
+var width = 1000, height = 1000;
+var colors = [
+            "white",
+      //"orchid", if you want to see the outer bigger circle
+            "blue",
+            "gold",
+            "green", 
+            "red", 
+            "maroon"
+		];
+var week = 0;
+
+//Step 1: Make JSON representation of popularity data.
+var viewsJSON = getJSONForOneWeekOfPopularityData(0);
+
+//Step 2: Pass on JSON to pack layout and get graphical 
+//calculations in return.
+var pack = d3.layout.pack()
+    .size([500, 500])
+    .value(function(d) { return d.popularity; });
+var packCalculations = pack.nodes(viewsJSON);
+
+//Step 3: Use calculations to generate SVG.
+var svg = d3.select("body").append("svg")
+
+.attr("width", width)
+   .attr("height", height)
+   .selectAll("g").data(packCalculations).enter();
+var g = svg.append("g");
+g.append("circle")
+  .attr("r", function(d){return d.r})
+  .style("fill", function(d, i){return colors[i%6];})
+  .attr("transform", function(d,i){return "translate(" + d.x + "," + d.y + ")"});
+g.append("text")
+  .attr("x", -10)
+  .attr("fill", "grey")
+  .text(function(d){return d.value})
+  .attr("transform", function(d,i){return "translate(" + d.x + "," + d.y + ")"});
+
+function getJSONForOneWeekOfPopularityData(week){
+var viewsJSONString = 
+  "{ \"name\": \"week" + week + "\", \"children\": [" ;
+  for (var count=0;
+           count<5;
+           count++   ){
+  viewsJSONString += 
+    "{ \"name\": \"" + colors[count+1] + " \", \"popularity\": " 
+    + views[week][count] + " }   ";
+
+  if (count<4) viewsJSONString += ",";
+
+  }
+  viewsJSONString += "]}"
+  return JSON.parse(viewsJSONString);
+}
+</script>
+</body>

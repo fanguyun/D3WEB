@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+width="1000" height="1000">
+
+<g transform="translate(0,143)">
+  <text x="60">Week 1</text>
+  <!-- resource-popularity tags omitted.-->
+</g>
+
+<g transform="translate(320,143)">
+  <text x="60">Week 2</text>
+  <!-- resource-popularity tags omitted.-->
+</g>
+
+<g transform="translate(640,143)">
+  <text x="60">Week 3</text>
+  <!-- resource-popularity tags omitted.-->
+</g>
+
+</svg>

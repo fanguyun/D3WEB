@@ -1,0 +1,104 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+width="1500" height="1000">
+
+<g>
+<!--Tags for circles omitted.-->
+</g>
+
+<g>
+
+<g transform="translate(100,250)">
+
+  <g transform="translate(0,200)">
+    <rect height="141.14" width="20" fill="blue"></rect>
+    <rect height="41.04" width="20" fill="lightblue"></rect>
+  </g>
+
+  <g transform="translate(22,200)">
+    <rect height="149.66" width="20" fill="gold"></rect>
+    <rect height="41.78" width="20" fill="yellow"></rect>
+  </g>
+
+  <g transform="translate(44,200)">
+    <rect height="74.98" width="20" fill="green"></rect>
+    <rect height="31.72" width="20" fill="lightgreen"></rect>
+  </g>
+
+  <g transform="translate(66,200)">
+    <rect height="76.92" width="20" fill="red"></rect>
+    <rect height="28.52" width="20" fill="lightcoral"></rect>
+  </g>
+
+  <g transform="translate(88,200)">
+    <rect height="91.96" width="20" fill="maroon"></rect>
+    <rect height="52.64" width="20" fill="indianred"></rect>
+  </g>
+
+</g>
+
+<g transform="translate(420,250)">
+
+  <g transform="translate(0,200)">
+    <rect height="119.44" width="20" fill="blue"></rect>
+    <rect height="41.42" width="20" fill="lightblue"></rect>
+  </g>
+
+  <g transform="translate(22,200)">
+    <rect height="113.44" width="20" fill="gold"></rect>
+    <rect height="43.8" width="20" fill="yellow"></rect>
+  </g>
+
+  <g transform="translate(44,200)">
+    <rect height="183.04" width="20" fill="green"></rect>
+    <rect height="144.28" width="20" fill="lightgreen"></rect>
+  </g>
+
+  <g transform="translate(66,200)">
+    <rect height="194.5" width="20" fill="red"></rect>
+    <rect height="75.64" width="20" fill="lightcoral"></rect>
+  </g>
+
+  <g transform="translate(88,200)">
+    <rect height="179.66" width="20" fill="maroon"></rect>
+   <rect height="54.42" width="20" fill="indianred"></rect>
+  </g>
+
+</g>
+
+<g transform="translate(740,250)">
+
+  <g transform="translate(0,200)">
+    <rect height="174.98" width="20" fill="blue"></rect>
+    <rect height="61.52" width="20" fill="lightblue"></rect>
+  </g>
+
+  <g transform="translate(22,200)">
+    <rect height="95.36" width="20" fill="gold"></rect>
+    <rect height="63.8" width="20" fill="yellow"></rect>
+  </g>
+
+  <g transform="translate(44,200)">
+    <rect height="134.76" width="20" fill="green"></rect>
+    <rect height="90.64" width="20" fill="lightgreen"></rect>
+  </g>
+
+  <g transform="translate(66,200)">
+    <rect height="190.92" width="20" fill="red"></rect>
+    <rect height="76.5" width="20" fill="lightcoral"></rect>
+  </g>
+
+  <g transform="translate(88,200)">
+    <rect height="139.66" width="20" fill="maroon"></rect>
+    <rect height="96.62" width="20" fill="indianred"></rect>
+  </g>
+
+</g>
+
+</g>
+
+</svg>
+

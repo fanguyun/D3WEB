@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<!--
+<script src="https://github.com/douglascrockford/JSON-js/blob/master/json2.js"></script>
+ -->
+<script src="d3.v3.js"></script>
+
+
+<script>
+
+var views = [
+  [7057, 7483, 3749, 3846, 4598],
+  [ 2371, 7397, 4589, 2861, 8249],
+  [ 5972, 5672, 9152, 9725, 8983],
+  [ 9763,  8462,  9782, 1953, 5182],
+  [ 9567,  1571,  2895, 2783, 1874],
+  [ 2371, 7397, 4589, 2861, 8249]
+		];
+var viewsAndInteraction = [
+[ [7057, 2052], [7483, 2089], [3749, 1586],
+  [3846, 1426], [4598, 2632]               ],
+[ [5972, 2071], [5672, 2190], [9152, 7214],
+  [9725, 3782], [8983, 2721]               ],
+[ [8749, 3076], [4768, 3190], [6738, 4532],
+  [9546, 3825], [6983, 4831]               ]
+               ];
+var viewColors = [
+  "white",
+  "blue",
+  "gold",
+  "green", 
+  "red", 
+  "maroon"
+                ];
+var interactionColors = [	
+   "white",
+   "lightblue",
+   "yellow", 
+   "lightgreen", 
+   "lightcoral", 
+   "indianred"
+                        ];
+var width = 1500, height = 1000;
+var widthOfOnePack = 300, heightOfOnePack = 300;
+var spaceBetweenPacks = 20;
+var calculations = [];
+for (var count=0;
+           count<3;
+           count++   ){
+  var pack = d3.layout.pack()
+    .size([widthOfOnePack , heightOfOnePack])
+    .value(function(d) { return d.size; });
+  calculations[count] = pack.nodes(
+    getJSONForOneWeekOfPopularityAndInteractionData(
+      count));
+}
+var svg = d3.select("body").append("svg")
+   .attr("width", width)
+   .attr("height", height);
+
+var circles = svg.append("g");
+var bars = svg.append("g");
+var arcsAndChords = svg.append("g");
+
+////// Circles
+var g1 = circles.selectAll("g")
+          .data(calculations).enter().append("g")
+          .attr("transform", function(d,i){
+             return "translate(" + 
+                (widthOfOnePack + spaceBetweenPacks)
+                *i + "," + 
+                height / 7 + ")" });
+g1.append("text")
+.text(function(d, i){return "Week " + (i+1)})
+  .attr("x", 60);
+var g2 = g1.selectAll("g")
+   .data(function(d){return d;})
+   .enter()
+   .append("g");
+g2.append("circle")
+  .attr("r", function(d, i){return d.r})
+  .style("fill", function(d, i){return viewColors[i%6];})
+  .attr("transform", function(d,i){
+     return "translate(" + d.x + "," + d.y + ")"});
+g2.append("circle")
+  .attr("r", function(d, i){
+      if (!d.interaction) return 0; 
+      return ((d.interaction*d.r)/d.value);})
+  .style("fill", function(d, i){return interactionColors[i%6];})
+  .attr("transform", function(d,i){return "translate(" + d.x + "," + d.y + ")"});
+
+g2.append("text")
+  .attr("x", -15)
+  .attr("y", 35)
+  .attr("fill", "white")
+  .text(function(d, i){return d.value})
+  .attr("transform", function(d,i){
+      return "translate(" + d.x + "," + d.y + ")"});
+
+g2.append("text")
+  .attr("x", -15)
+  .attr("y", 5)
+  .text(function(d, i){return d.interaction})
+  .attr("transform", function(d,i){
+       return "translate(" + d.x + "," + d.y + ")"});
+
+////// Bars
+var svg2 = bars.selectAll("g").data(viewsAndInteraction).enter().append("g")
+    .attr("transform", function(d,i){
+  return "translate(" + (100 + (
+                (widthOfOnePack + spaceBetweenPacks)
+                *i))
+                 + "," + height / 4 + ")" });
+
+var svg22 = svg2.selectAll("g")
+        .data(function(d){return d;})
+    .enter().append("g")
+    .attr("transform", function(d,i){
+  return "translate(" + 22*i + "," + height / 5 + ")" });
+
+svg22.append("rect")
+     .attr("height", function(d){return d[0]/50;})
+     .attr("width", 20)
+     .attr("fill", function(d, i){return viewColors[i+1]});
+
+svg22.append("rect")
+     .attr("height", function(d){return d[1]/50;})
+     .attr("width", 20)
+     .attr("fill", function(d, i){return interactionColors[i+1]});
+
+////// Arcs and chords
+var navigation = [
+        [
+  [3057, 3483, 8749, 8465, 4598],
+  [ 2371, 7397, 4589, 2861, 8249],
+  [ 5972, 5672, 9152, 9725, 8983],
+  [ 9763,  8462,  9782, 1953, 5182],
+  [ 9567,  1571,  2895, 2783, 1874]
+        ],
+        [
+  [1057, 9483, 1278, 7453, 2198],
+  [ 2980, 397, 3967, 2587, 7562],
+  [ 5462, 672, 4792, 725, 3743],
+  [ 9763,  8462,  9248, 1653, 4182],
+  [ 957,  7571,  8568, 2783, 1874]
+        ],
+        [
+  [574, 3453, 3749, 7465, 5388],
+  [ 2331, 7395, 3674, 290, 3249],
+  [ 5923, 2672, 3172, 725, 683],
+  [ 763, 4462,  282, 153, 282],
+  [ 5567, 5871, 3895, 2732, 3874]
+        ]
+               ];
+var chordCalculations = [];
+var navigationChord = [];
+for (var weekCount=0; weekCount<3; weekCount++ )
+   navigationChord[weekCount] 
+      = d3.layout.chord()
+          .matrix(navigation[weekCount]);
+
+//You need d3.scale only if you want to use 
+//standard D3 color scheme for chords.
+//If you use my scheme instead of standard, 
+//use colorOffset array.
+var fill = d3.scale.ordinal()
+    .domain(d3.range(5))
+    .range([
+                "blue",
+ 			"gold", 
+			"green", 
+			"red", 
+			"maroon"
+           ]);
+//Play with colorOffset to have whatever color scheme
+//for chords you want.
+var colorOffset = [0,1,2,2,0,1,2,3,1,2,3,4,3,4,4];
+var radius = 135, 
+    arcStroke = 10;
+
+var arcs = arcsAndChords.append("g");
+var chords = arcsAndChords.append("g");
+
+/////// Arcs
+arcs.selectAll("g")
+.data(navigationChord).enter().append("g")
+            .attr("transform", function(d,i){
+              return "translate(" + (150+i*(widthOfOnePack
+              +spaceBetweenPacks )) + "," + height/1.2 + ")"                             
+              })
+.selectAll("path")
+.data(function (d,i){return d.groups();})
+.enter()
+.append("path")
+.style("fill", function(d, i) { 
+   return viewColors[(i%6)+1]; })
+.attr("d", d3.svg.arc().innerRadius(radius)
+                       .outerRadius(radius+arcStroke));
+
+//////// Chords
+chords.selectAll("g")
+   .data(navigationChord)
+   .enter()
+   .append("g")
+   .attr("transform", function(d,i){
+              return "translate(" + (150+i*(widthOfOnePack                             
+              +spaceBetweenPacks )) + "," + height/1.2 + ")"                             
+              })
+   .selectAll("path")
+   .data(function (d,i){return d.chords();})
+   .enter()
+   .append("path")
+   .attr("d", d3.svg.chord().radius(radius))
+   .style("stroke", "black")
+   .style("fill", function(d, i) {
+      return viewColors[(colorOffset[i]+1)];
+      //If you are using standard D3 color scheme for chords,
+      //the following should be returned.
+      //return fill(d.target.index);
+   });
+
+function getJSONForOneWeekOfPopularityAndInteractionData(week){
+var viewsAndInteractionJSON = 
+  "{ \"name\": \"week" + week + "\", \"children\": [" ;
+  for (var count=0; count<5; count++){
+    viewsAndInteractionJSON += 
+     "{ \"name\": \"" + viewColors[count+1] + 
+      " \", \"size\": \"" + viewsAndInteraction[week][count][0] +       
+      "\", \"interaction\": \"" + 
+      viewsAndInteraction[week][count][1] + "\"     }   ";
+  if (count<4) viewsAndInteractionJSON += ",";
+  }
+  viewsAndInteractionJSON += "]}";
+  return JSON.parse(viewsAndInteractionJSON) ;
+}
+
+</script>
+</body>

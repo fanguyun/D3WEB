@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<!--
+<script src="https://github.com/douglascrockford/JSON-js/blob/master/json2.js"></script>
+ -->
+<script src="d3.v3.js"></script>
+
+<script>
+
+var views = [
+  [7057, 7483, 3749, 3846, 4598],
+  [ 2371, 7397, 4589, 2861, 8249],
+  [ 5972, 5672, 9152, 9725, 8983],
+		];
+
+
+var colors = [
+  "white",
+  "blue",
+  "gold",
+  "green", 
+  "red", 
+  "maroon"   ];
+var width = 1500, height = 1000;
+var widthOfOnePack = 300, heightOfOnePack = 300;
+var spaceBetweenPacks = 20;
+var calculations = [];
+for (var count=0; count<3; count++){
+  var pack = d3.layout.pack()
+              .size([widthOfOnePack, heightOfOnePack])
+              .value(function(d) { 
+                 return d.popularity; });
+  calculations[count] = 
+     pack.nodes(
+       getJSONForOneWeekOfPopularityData(count)
+               );
+}
+var svg = d3.select("body").append("svg")
+   .attr("width", width)
+   .attr("height", height);
+var g1 = svg.selectAll("g")
+          .data(calculations).enter().append("g")
+          .attr("transform", function(d,i){
+             return "translate(" + 
+            (widthOfOnePack + spaceBetweenPacks )*i + 
+            "," + height / 7 + ")" });
+g1.append("text")
+.text(function(d, i){return "Week " + (i+1)})
+  .attr("x", 60);
+
+var g2 = g1.selectAll("g")
+   .data(function(d){return d;})
+   .enter()
+   .append("g");
+
+g2.append("circle")
+  .attr("r", function(d, i){return d.r})
+  .style("fill", function(d, i){return colors[i%6];})
+  .attr("transform", function(d,i){
+         return "translate(" + d.x + "," + d.y + ")"});
+
+g2.append("text")
+  .attr("x", -10)
+  .attr("fill", "grey")
+  .text(function(d, i){return d.value})
+  .attr("transform", function(d,i){
+        return "translate(" + d.x + "," + d.y + ")"});
+
+function getJSONForOneWeekOfPopularityData(week){
+var viewsJSONString = 
+  "{ \"name\": \"week" + week + "\", \"children\": [" ;
+  for (var count=0;
+           count<5;
+           count++   ){
+  viewsJSONString += 
+    "{ \"name\": \"" + colors[count+1] + " \", \"popularity\": " 
+    + views[week][count] + " }   ";
+
+  if (count<4) viewsJSONString += ",";
+
+  }
+  viewsJSONString += "]}"
+  return JSON.parse(viewsJSONString);
+}
+
+</script>
+</body>
